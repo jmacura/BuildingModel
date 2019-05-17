@@ -1,0 +1,6 @@
+simulationStartDate: 2019-04-28
+simulationStartTime: "17:00:00"
+simulationDuration: "02:00:00"
+samplingPeriod: "15:00"
+initialTemperature: 10.0
+outsideTemperature: 20.0
