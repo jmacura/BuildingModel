@@ -11,7 +11,7 @@ import java.util.HashMap;
  * The {@code SimulationLog} class instances represent a logbook of each event during one simulation loop.
  *
  * @author jmacura
- * @version 0.00.0000 &mdash; 2019
+ * @version 1.00 &mdash; 2019
  */
 public class SimulationLog extends HashMap<String, ArrayList<SimulationEvent>> {
 

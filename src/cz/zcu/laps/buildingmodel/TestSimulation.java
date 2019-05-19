@@ -176,7 +176,7 @@ public class TestSimulation {
         try {
             for (HashMap.Entry<String, ArrayList<SimulationEvent>> room : simulation.entrySet()) {
                 String roomId = room.getKey();
-                String fName = "HTO_" + roomId + ".json";
+                String fName = "temperature_" + roomId + ".json";
                 File outputFile;
                 if (outFolder != null) {
                     outputFile = new File(new File(outFolder), fName);

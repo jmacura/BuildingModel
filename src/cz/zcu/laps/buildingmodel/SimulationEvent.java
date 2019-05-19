@@ -6,7 +6,7 @@ import java.time.Instant;
  * The {@code SimulationEvent} class instances represent a point in time, in which the temperature changes.
  *
  * @author jmacura
- * @version 0.00.0000 &mdash; 2019
+ * @version 1.00 &mdash; 2019
  */
 public class SimulationEvent {
     private Instant timestamp;

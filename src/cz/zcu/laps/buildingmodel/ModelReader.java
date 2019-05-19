@@ -61,7 +61,8 @@ public class ModelReader {
     public HashMap<String, AbstractElement> createModel(SimulationParams params) {
         double initialRoomTemperature = params.getInitialTemperature(); // [°C]
         double samplingPeriod = (double) params.getSamplingPeriodInSeconds(); // min x 60 [s]
-        double c = SpecificHeat.AIR_DRY.getValue(); // Different for each room based on given volume!!! Not volume but weight!!
+        // TODO: specificHeat from file
+        double c = SpecificHeat.AIR_DRY.getValue(); // Different for each room based on given weight!!
         double rho = 1.29; // [kg/m^3] for air
 
         //Creating new rooms
@@ -70,9 +71,7 @@ public class ModelReader {
             JSONObject room = (JSONObject) element;
             String id = (String) room.get("id");
             double volume = (double) room.get("volume"); // [m^3]
-            // TODO: heatCapacitance from file
             double heatCapacitance = c*volume*rho; //6092*1e3;
-            //System.out.println(heatCapacitance);
             this.model.put(id, new RoomModel(initialRoomTemperature, samplingPeriod, heatCapacitance));
         }
 
@@ -89,17 +88,18 @@ public class ModelReader {
         JSONArray walls = (JSONArray) this.inputJson.get("walls");
         for (Object element : walls) {
             JSONObject wall = (JSONObject) element;
-            // TODO: conductivy from file
-            double specificConductivity = SpecificConductivity.CONCRETE_LIGHT.getValue(); //[W/(m*K)]
-            double area = (double) wall.get("area"); //[m^2]
+            // TODO: specificConductivy from file
+            double specificConductivity;//[W/(m*K)]
             double thickness; //[m]
             double conductivity; // [W/K]
+            double area = (double) wall.get("area"); //[m^2]
             String idRoomA = (String) wall.get("leftID");
             String idRoomB = (String) wall.get("rightID");
             AbstractElement abstractRoomA = this.model.get(idRoomA);
             AbstractElement abstractRoomB = this.model.get(idRoomB);
             // Both zones are rooms
             if (abstractRoomA instanceof RoomModel && abstractRoomB instanceof RoomModel) {
+                specificConductivity = SpecificConductivity.CONCRETE_LIGHT.getValue();
                 thickness = 0.4; //currently not in data => qualified guess
                 conductivity = specificConductivity*area/thickness;
                 RoomModel roomA = (RoomModel) abstractRoomA;
@@ -108,21 +108,22 @@ public class ModelReader {
                 roomB.addAdjacentConductiveElement(new AdjacentConductiveElement(conductivity, roomA));
             // Zone B is ambient
             } else if (abstractRoomA instanceof RoomModel){
-                thickness = 0.8; //currently not in data => qualified guess
+                specificConductivity = SpecificConductivity.BRICK_INSULATING.getValue();
+                thickness = 0.9; //currently not in data => qualified guess
                 conductivity = specificConductivity*area/thickness;
                 RoomModel roomA = (RoomModel) abstractRoomA;
                 AbstractStateElement roomB = (AbstractStateElement) abstractRoomB;
                 roomA.addAdjacentConductiveElement(new AdjacentConductiveElement(conductivity, roomB));
             // Zone A is ambient
             } else if (abstractRoomB instanceof RoomModel){
-                thickness = 0.8; //currently not in data => qualified guess
+                specificConductivity = SpecificConductivity.BRICK_INSULATING.getValue();
+                thickness = 0.9; //currently not in data => qualified guess
                 conductivity = specificConductivity*area/thickness;
                 RoomModel roomB = (RoomModel) abstractRoomB;
                 AbstractStateElement roomA = (AbstractStateElement) abstractRoomA;
                 roomB.addAdjacentConductiveElement(new AdjacentConductiveElement(conductivity, roomA));
             }
         }
-        //System.out.println(this.model.get("US201").toString());
         return this.model;
     }
 

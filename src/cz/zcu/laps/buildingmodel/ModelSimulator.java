@@ -41,9 +41,9 @@ public class ModelSimulator {
      */
     public SimulationLog simulate() {
         simuLog = new SimulationLog();
-        for (HashMap.Entry<String, AbstractElement> room : model.entrySet()) {
+        /*for (HashMap.Entry<String, AbstractElement> room : model.entrySet()) {
             System.out.println(room.getKey() + "/" + room.getValue().getValue());
-        }
+        }*/
         System.out.println("Simulation starts...");
         while (simuTime.isBefore(endTime) || simuTime.equals(endTime)) {
             //System.out.println(simuTime + " / " + model.get("US201").getValue());
@@ -57,9 +57,9 @@ public class ModelSimulator {
             simuTime = simuTime.plusSeconds(samplingPeriod);
         }
         System.out.println("SimulationLog done");
-        for (HashMap.Entry<String, AbstractElement> room : model.entrySet()) {
+        /*for (HashMap.Entry<String, AbstractElement> room : model.entrySet()) {
             System.out.println(room.getKey() + "/" + room.getValue().getValue());
-        }
+        }*/
         return this.simuLog;
     }
 }

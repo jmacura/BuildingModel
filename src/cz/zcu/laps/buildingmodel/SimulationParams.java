@@ -11,7 +11,7 @@
  * Its structure correlates with the YAML file, which can be used as an input of the application.
  *
  * @author jmacura
- * @version 0.00.0000 &mdash; 2019
+ * @version 1.00 &mdash; 2019
  */
 public class SimulationParams {
 
